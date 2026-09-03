@@ -60,24 +60,19 @@ def get_item(api):
         collection = get_table_by_id(value, api=api)
         return collection
     elif type_ == "file":
-        folders = check["folders"]
-        for folder in folders:
-            folder_name = folder["id"]
-            if folder_name != value:
-                return jsonify({"error": "wrong api"}), 400
-            
-        file = get_file(file_id=value, api=api)
+        
+        file = get_file(file_id=value)
         return file
+                
     else:
         return jsonify({"error": "type is invalid"}), 400
-
-def get_file(api, file_id):
+    
+def get_file(file_id):
     try:
-        file = bot.get_file(file_id)
-
+        file = bot.get_file(file_id)        
         resp = requests.get(file.file_path, stream=True)
         image_bytes = BytesIO(resp.content)
-
+        
         kind = filetype.guess(image_bytes.getvalue())
 
         if kind:
@@ -92,13 +87,10 @@ def get_file(api, file_id):
         response = send_file(
             image_bytes,
             mimetype=mime_type,
-            as_attachment=True,
+            as_attachment=True, 
             download_name=filename,
         )
 
-        # response.headers["Access-Control-Expose-Headers"] = (
-        #     "Content-Disposition"
-        # )
 
         return response
 
