@@ -400,7 +400,7 @@ def upload_file(api):
 
         new_data = {"name": f"{file.filename}", "id": saved_file_id}
         folder_by_id.append(new_data)
-        result = {"success": "file was added"}
+        result = new_data
         
 
     else:
