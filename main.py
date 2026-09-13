@@ -47,10 +47,14 @@ def get_item(api):
     type_ = request.args.get("type")   
     value = request.args.get("value")
 
-    
+    if type_ == "file":
+        
+        file = get_file(file_id=value)
+        return file
+        
     check = check_api(api=api)
     if not check:
-        return jsonify({"error": "wrong"}), 400
+        return jsonify({"error": "wrong api"}), 400
 
     
     if not type_:
@@ -59,10 +63,7 @@ def get_item(api):
     if type_ in ["collection", "folder"]:
         collection = get_table_by_id(value, api=api)
         return collection
-    elif type_ == "file":
-        
-        file = get_file(file_id=value)
-        return file
+
                 
     else:
         return jsonify({"error": "type is invalid"}), 400
